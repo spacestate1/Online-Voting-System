@@ -16,6 +16,7 @@
               echo "
                 <li><a href='index.php'>HOME</a></li>
                 <li><a href='transaction.php'>TRANSACTION</a></li>
+                <li><a href='change_password.php'>CHANGE PASSWORD</a></li>
               ";
             } 
           ?>
