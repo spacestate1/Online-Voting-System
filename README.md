@@ -20,7 +20,7 @@
 
 ## SOFTWARE REQUIREMENTS
 <ul type="square">
-  <li> <b> Operating System : </b> Any version of Windows NT family (4.0 &above) </li>
+  <li> <b> Operating System : </b> Debian/Fedora/Alma Linux  </li>
    &emsp;
   <li> <b> Frontend : </b>
        <p align="left"> 
@@ -65,23 +65,20 @@
 
 DOWNLOAD "Online Voting Management System Project"
 
-1. Install XAMPP
+1. Install dependencies, mariadb, php, phpmyadmin, apache2
 
-2. Download the zip file/ download winrar
+2. Place votesystem directory into /var/www/html/ or where it's needed and set permissions
 
-3. Extract the file and copy "voting management system" folder
+3. Setup the database and run the db/votesystem.sql to set up the database in mariadb or phpmyadmin
 
-4. Paste inside root directory/ where you install xammp local disk C: drive D: drive E: paste: (for xampp/htdocs)
+4. Edit the votesystem/includes/conn.php file to include database connection creds
 
-5. Open PHPMyAdmin `http://localhost/phpmyadmin`
 
-6. Create a database with name votesystem
+5. Use the Following Credential to log into the Admin Session
 
-7. Import votesystem.sql file(given inside the zip package in db file folder)
+6. Browse to http://localhost/votesystem/admin/index.php for admin console
 
-8. Run the script 
-
-9. Use the Following Credential to log into the Admin Session
+7. Browse to http://localhost/votesystem for the user page
    
    `username:  crce`
    
