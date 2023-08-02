@@ -84,6 +84,7 @@
                           <td><a href='#platform' data-toggle='modal' class='btn btn-info btn-sm btn-curve platform'  style='background-color: #00BFFF ;color:black ; font-size: 12px; font-family:Times' data-id='".$row['canid']."'><i class='fa fa-search'></i> View</a></td>
                           <td>
                             <button class='btn btn-success btn-sm edit btn-curve' style='background-color: #9CD095 ;color:black ; font-size: 12px; font-family:Times'  data-id='".$row['canid']."' ><i class='fa fa-edit'></i> Edit</button>
+
                             <button class='btn btn-danger btn-sm delete btn-curve' style='background-color:#ff8e88 ;color:black ; font-size: 12px; font-family:Times' data-id='".$row['canid']."'><i class='fa fa-trash'></i> Delete</button>                          
                           </td>
                         </tr>
@@ -110,15 +111,84 @@
 
 
 	$(function(){
-  $(document).on('click', '.edit', function(e){
+//$(document).on('click', '.edit', function(e){
+//  e.preventDefault();
+//  var id = $(this).data('id');
+
+//  getRow(id, function(response) {
+    // Assuming response contains the candidate data
+//    $('#edit_firstname').val(response.firstname);
+//    $('#edit_lastname').val(response.lastname);
+ //   $('#edit_position').val(response.position); // you may need to handle this differently if it's a dropdown
+ //   $('#edit_platform').val(response.platform);
+
+    // Set the hidden input field's value to the candidate's ID
+   // $('#edit input[name="id"]').val(id);
+
+//    $('#edit').modal('show');
+//  });
+//});
+
+$(document).on('click', '.edit', function(e){
     e.preventDefault();
+    $('#edit').modal('show');
     var id = $(this).data('id');
-    getRow(id, function() {
-      $('#edit').modal('show');
-    });
-  });
-  
- $(document).on('click', '.delete', function(e){
+    var firstname = $(this).data('firstname');
+    var lastname = $(this).data('lastname');
+    var platform = $(this).data('platform');
+    var position = $(this).data('position');
+
+    // Set the form field values
+    $('#edit input[name="id"]').val(id);  // Hidden input for ID
+    $('#edit_firstname').val(firstname);
+    $('#edit_lastname').val(lastname);
+    $('#edit_platform').val(platform);
+    $('#edit_position').val(position); // Assuming you also want to autofill position
+});
+
+
+
+$('#edit').on('submit', 'form', function(e) {
+  e.preventDefault();
+
+  var id = $(this).find('[name="id"]').val();
+  var firstname = $('#edit_firstname').val();
+  var lastname = $('#edit_lastname').val();
+  var position = $('#edit_position').val();
+  var platform = $('#edit_platform').val();
+
+  // Now we send the AJAX request
+  $.ajax({
+    type: 'POST',
+    url: 'candidates_edit.php',
+    data: {
+      id: id,
+      edit: true, // This is required to pass the 'if(isset($_POST['edit']))' check in your PHP code
+      firstname: firstname,
+      lastname: lastname,
+      position: position,
+      platform: platform
+    },
+    dataType: 'json',
+    success: function(response) {
+      if (response.error) {
+        alert('Error: ' + response.error);
+      } else {
+        location.reload();
+      }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+    console.log('jqXHR:', jqXHR);
+    console.log('textStatus:', textStatus);
+    console.log('errorThrown:', errorThrown);  
+}
+
+});
+});
+
+
+
+$(document).on('click', '.delete', function(e){
     e.preventDefault();
     var id = $(this).data('id');
     console.log("ID to delete: ", id); // Log the ID to the console

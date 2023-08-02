@@ -98,8 +98,11 @@ while ($row = pg_fetch_assoc($result)){
             </div>
             <div class="modal-body">
               <form class="form-horizontal" method="POST" action="candidates_edit.php">
-                <input type="hidden" class="id" name="id">
-                <div class="form-group">
+                <input type="hidden" data-id="" name="id">
+
+
+
+<div class="form-group">
                     <label for="edit_firstname" class="col-sm-3 control-label">Firstname</label>
 
                     <div class="col-sm-9">
@@ -149,6 +152,8 @@ while ($row = pg_fetch_assoc($result)){
         </div>
     </div>
 </div>
+
+
 
 <!-- Delete -->
 <div class="modal fade" id="delete">
