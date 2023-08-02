@@ -16,6 +16,7 @@ CREATE TABLE admin (
   password VARCHAR(60) NOT NULL,
   firstname VARCHAR(50) NOT NULL,
   lastname VARCHAR(50) NOT NULL,
+  email VARCHAR(255) NOT NULL,
   photo VARCHAR(150) NOT NULL,
   created_on DATE NOT NULL
 );

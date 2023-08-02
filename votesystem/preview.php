@@ -1,14 +1,13 @@
 <?php
-	
 	include 'includes/session.php';
 	include 'includes/slugify.php';
 
 	$output = array('error'=>false,'list'=>'');
 
 	$sql = "SELECT * FROM positions";
-	$query = $conn->query($sql);
+	$query = pg_query($conn, $sql);
 
-	while($row = $query->fetch_assoc()){
+	while($row = pg_fetch_assoc($query)){
 		$position = slugify($row['description']);
 		$pos_id = $row['id'];
 		if(isset($_POST[$position])){
@@ -19,9 +18,9 @@
 				}
 				else{
 					foreach($_POST[$position] as $key => $values){
-						$sql = "SELECT * FROM candidates WHERE id = '$values'";
-						$cmquery = $conn->query($sql);
-						$cmrow = $cmquery->fetch_assoc();
+						$sql = "SELECT * FROM candidates WHERE id = $1";
+						$cmquery = pg_query_params($conn, $sql, array($values));
+						$cmrow = pg_fetch_assoc($cmquery);
 						$output['list'] .= "
 							<div class='row votelist'>
 		                      	<span class='col-sm-4'><span class='pull-right'><b>".$row['description']." :</b></span></span> 
@@ -35,9 +34,9 @@
 			}
 			else{
 				$candidate = $_POST[$position];
-				$sql = "SELECT * FROM candidates WHERE id = '$candidate'";
-				$csquery = $conn->query($sql);
-				$csrow = $csquery->fetch_assoc();
+				$sql = "SELECT * FROM candidates WHERE id = $1";
+				$csquery = pg_query_params($conn, $sql, array($candidate));
+				$csrow = pg_fetch_assoc($csquery);
 				$output['list'] .= "
 					<div class='row votelist'>
                       	<span class='col-sm-4'><span class='pull-right'><b>".$row['description']." :</b></span></span> 
@@ -51,6 +50,5 @@
 	}
 
 	echo json_encode($output);
-
-
 ?>
+
