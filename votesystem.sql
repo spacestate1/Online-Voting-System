@@ -17,19 +17,29 @@ CREATE TABLE admin (
   firstname VARCHAR(50) NOT NULL,
   lastname VARCHAR(50) NOT NULL,
   email VARCHAR(255) NOT NULL,
-  photo VARCHAR(150) NOT NULL,
+  photo VARCHAR(150),
   created_on DATE NOT NULL
 );
 
 -- --------------------------------------------------------
+--elections table 
+
+CREATE TABLE elections (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    start_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    end_date TIMESTAMP WITHOUT TIME ZONE NOT NULL
+);
 
 -- Table structure for table positions
 
 CREATE TABLE positions (
   id SERIAL PRIMARY KEY,
+  election_id INT NOT NULL,
   description VARCHAR(50) NOT NULL,
   max_vote INT NOT NULL,
-  priority INT NOT NULL
+  priority INT NOT NULL,
+  FOREIGN KEY (election_id) REFERENCES elections (id) ON DELETE CASCADE
 );
 
 -- --------------------------------------------------------
@@ -38,11 +48,13 @@ CREATE TABLE positions (
 
 CREATE TABLE candidates (
   id SERIAL PRIMARY KEY,
+  election_id INT NOT NULL,
   position_id INT NOT NULL,
   firstname VARCHAR(30) NOT NULL,
   lastname VARCHAR(30) NOT NULL,
-  photo VARCHAR(150) NOT NULL,
+  photo VARCHAR(150),
   platform TEXT NOT NULL,
+  FOREIGN KEY (election_id) REFERENCES elections (id) ON DELETE CASCADE,
   FOREIGN KEY (position_id) REFERENCES positions (id) ON DELETE CASCADE
 );
 
@@ -57,18 +69,21 @@ CREATE TABLE voters (
   password VARCHAR(60) NOT NULL,
   firstname VARCHAR(30) NOT NULL,
   lastname VARCHAR(30) NOT NULL,
-  photo VARCHAR(150) NOT NULL,
+  photo VARCHAR(150),
   email VARCHAR(100) NOT NULL
 );
+
 -- --------------------------------------------------------
 
 -- Table structure for table votes
 
 CREATE TABLE votes (
   id SERIAL PRIMARY KEY,
+  election_id INT NOT NULL,
   voters_id INT NOT NULL,
   candidate_id INT NOT NULL,
   position_id INT NOT NULL,
+  FOREIGN KEY (election_id) REFERENCES elections (id) ON DELETE CASCADE,
   FOREIGN KEY (voters_id) REFERENCES voters (id) ON DELETE CASCADE,
   FOREIGN KEY (candidate_id) REFERENCES candidates (id) ON DELETE CASCADE,
   FOREIGN KEY (position_id) REFERENCES positions (id) ON DELETE CASCADE
@@ -77,6 +92,5 @@ CREATE TABLE votes (
 -- --------------------------------------------------------
 
 -- Inserting data for table admin
-
-INSERT INTO admin (username, password, firstname, lastname, photo, created_on) VALUES
-('crce', '$2y$10$kLqXG4BAJrPbsOjJ/.B4eeZn6oojNhAb8l5/cb9eZvFnYU.pz2qni', 'CRCE', 'Admin', 'WhatsApp Image 2021-05-27 at 17.55.34.jpeg', '2018-04-02');
+INSERT INTO admin (username, password, firstname, lastname, email, photo, created_on) 
+VALUES ('crce', '$2y$10$kLqXG4BAJrPbsOjJ/.B4eeZn6oojNhAb8l5/cb9eZvFnYU.pz2qni', 'CRCE', 'Admin', 'admin@fake.com', 'WhatsApp Image 2021-05-27 at 17.55.34.jpeg', '2018-04-02');
