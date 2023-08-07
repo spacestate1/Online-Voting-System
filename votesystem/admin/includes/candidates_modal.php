@@ -17,6 +17,27 @@
     </div>
 </div>
 
+<!-- Platform Modal -->
+<div class="modal fade" id="platform">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Candidate Platform</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="platform_view"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- Add -->
 <div class="modal fade" id="addnew">
     <div class="modal-dialog">
@@ -64,13 +85,6 @@ while ($row = pg_fetch_assoc($result)){
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="photo" class="col-sm-3 control-label">Photo</label>
-
-                    <div class="col-sm-9">
-                      <input type="file" id="photo" name="photo">
-                    </div>
-                </div>
-                <div class="form-group">
                     <label for="platform" class="col-sm-3 control-label">Platform</label>
 
                     <div class="col-sm-9">
@@ -86,7 +100,6 @@ while ($row = pg_fetch_assoc($result)){
         </div>
     </div>
 </div>
-
 <!-- Edit -->
 <div class="modal fade" id="edit">
     <div class="modal-dialog">
@@ -94,13 +107,11 @@ while ($row = pg_fetch_assoc($result)){
             <div class="modal-header">
               <button type="button" class=" btn btn-close btn-curve pull-right"  data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title"><b>Edit Voter</b></h4>
+              <h4 class="modal-title"><b>Edit Candidate</b></h4>
             </div>
             <div class="modal-body">
               <form class="form-horizontal" method="POST" action="candidates_edit.php">
-                <input type="hidden" data-id="" name="id">
-
-
+<input type="hidden" class="id" name="id" value="">
 
 <div class="form-group">
                     <label for="edit_firstname" class="col-sm-3 control-label">Firstname</label>
@@ -166,8 +177,9 @@ while ($row = pg_fetch_assoc($result)){
             </div>
             <div class="modal-body">
               <form class="form-horizontal" id="delete_form">
-                <input type="hidden" class="id" name="id">
-                <div class="text-center">
+              <input type="hidden" id="delete_candidate_id" name="id">
+               
+ <div class="text-center">
                     <p>DELETE CANDIDATE</p>
                     <h2 class="bold fullname"></h2>
                 </div>

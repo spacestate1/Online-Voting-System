@@ -3,8 +3,12 @@
 
 	if(isset($_POST['id'])){
 		try {
-			$id = pg_escape_string($conn, $_POST['id']);
-			$sql = "SELECT *, candidates.id AS canid FROM candidates LEFT JOIN positions ON positions.id=candidates.position_id WHERE candidates.id = $1";
+			$id = $_POST['id'];
+			$sql = "SELECT *, candidates.id AS canid, elections.id as electionid 
+                    FROM candidates 
+                    LEFT JOIN positions ON positions.id=candidates.position_id 
+                    LEFT JOIN elections ON elections.id=candidates.election_id 
+                    WHERE candidates.id = $1";
 			$result = pg_query_params($conn, $sql, array($id));
 
 			if(!$result){

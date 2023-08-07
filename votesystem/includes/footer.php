@@ -3,7 +3,7 @@
       <div class="pull-right hidden-xs">
         <b>All rights reserved</b>
       </div>
-      <b style="color:white ; font-size: 13px"><strong>Copyright &copy; CGL </strong></b>
+     <b style="color:white ; font-size: 13px"><strong>Copyright &copy; WECP </strong></b>
     </div>
     <!-- /.container -->
 </footer>

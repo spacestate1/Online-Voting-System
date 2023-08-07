@@ -11,23 +11,24 @@
 
         if(pg_num_rows($result) < 1){
             $_SESSION['error'] = 'Cannot find voter with the ID';
+            header('location: index.php');
         }
         else{
             $row = pg_fetch_assoc($result);
             if(password_verify($password, $row['password'])){
-                $_SESSION['voter'] = $row['id'];
+                // The session variable name is updated to 'userid' here
+                $_SESSION['userid'] = $row['id'];
+                header('location: home.php');
             }
             else{
                 $_SESSION['error'] = 'Incorrect password';
+                header('location: index.php');
             }
         }
-        
     }
     else{
         $_SESSION['error'] = 'Input voter credentials first';
+        header('location: index.php');
     }
-
-    header('location: index.php');
-
 ?>
 

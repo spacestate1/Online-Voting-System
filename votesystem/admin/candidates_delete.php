@@ -2,7 +2,7 @@
     include 'includes/session.php';
 
     if(isset($_POST['id'])){
-        $id = pg_escape_string($conn, $_POST['id']);
+        $id = $_POST['id'];
         
         // Check if ID is a valid integer
         if (filter_var($id, FILTER_VALIDATE_INT)) {

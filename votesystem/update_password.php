@@ -18,7 +18,9 @@ $retype_password = pg_escape_string($conn, $retype_password);
 // Validate form inputs
 if ($new_password !== $retype_password) {
     // Passwords do not match
-    exit("New password and confirm password do not match.");
+    $_SESSION['error'] = "New password and confirm password do not match.";
+    header('location: change_password.php');
+    exit();
 }
 
 // Fetch the user's current hashed password from the database
@@ -27,7 +29,9 @@ $result = pg_query_params($conn, $query_check, array($username));
 
 if (pg_num_rows($result) === 0) {
     // User not found in the database
-    exit("User not found.");
+    $_SESSION['error'] = "User not found.";
+    header('location: change_password.php');
+    exit();
 }
 
 $row = pg_fetch_assoc($result);
@@ -36,7 +40,9 @@ $hashed_password = $row['password'];
 // Verify the current password with the hashed password stored in the database
 if (!password_verify($curr_password, $hashed_password)) {
     // Current password is incorrect
-    exit("Incorrect current password.");
+    $_SESSION['error'] = "Incorrect current password.";
+    header('location: change_password.php');
+    exit();
 }
 
 // Hash the new password
@@ -48,11 +54,15 @@ $result = pg_query_params($conn, $query_update, array($hashed_new_password, $use
 
 if (!$result) {
     // Update query execution error
-    exit("Error updating password: " . pg_last_error($conn));
+    $_SESSION['error'] = "Error updating password: " . pg_last_error($conn);
+    header('location: change_password.php');
+    exit();
 }
 
 // Password updated successfully
-echo "Password updated successfully.";
+$_SESSION['success'] = "Password updated successfully!";
+header('location: home.php');
+exit();
 
 // Close the database connection
 pg_close($conn);

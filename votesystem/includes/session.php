@@ -2,9 +2,9 @@
 include 'includes/conn-pgsql.php'; // Include the file to establish PostgreSQL database connection
 session_start();
 
-if (isset($_SESSION['voter'])) {
+if (isset($_SESSION['userid'])) {
     $sql = "SELECT * FROM voters WHERE id = $1";
-    $result = pg_query_params($conn, $sql, array($_SESSION['voter']));
+    $result = pg_query_params($conn, $sql, array($_SESSION['userid']));
 
     if ($result && pg_num_rows($result) === 1) {
         $voter = pg_fetch_assoc($result);

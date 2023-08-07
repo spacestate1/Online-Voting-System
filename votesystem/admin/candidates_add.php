@@ -7,12 +7,22 @@
 			$lastname = pg_escape_string($conn, $_POST['lastname']);
 			$position = pg_escape_string($conn, $_POST['position']);
 			$platform = pg_escape_string($conn, $_POST['platform']);
-			$filename = $_FILES['photo']['name'];
-			if(!empty($filename)){
-				move_uploaded_file($_FILES['photo']['tmp_name'], '../images/'.$filename);	
+
+			// Getting the election_id from positions table
+			$sql = "SELECT election_id FROM positions WHERE id = '$position'";
+			$query = pg_query($conn, $sql);
+
+			if(!$query){
+				throw new Exception('Failed to retrieve election id. ' . pg_last_error($conn));
+			}
+			$row = pg_fetch_assoc($query);
+			$election = $row['election_id'];
+
+			if(!$election){
+				throw new Exception('No election associated with this position.');
 			}
 
-			$sql = "INSERT INTO candidates (position_id, firstname, lastname, photo, platform) VALUES ('$position', '$firstname', '$lastname', '$filename', '$platform')";
+			$sql = "INSERT INTO candidates (election_id, position_id, firstname, lastname, platform) VALUES ('$election', '$position', '$firstname', '$lastname', '$platform')";
 			$result = pg_query($conn, $sql);
 
 			if(!$result){

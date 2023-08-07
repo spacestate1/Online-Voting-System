@@ -12,7 +12,7 @@
     <section class="content-header">
       <h1><b>
         Candidates List
-     </b> </h1>
+      </b></h1>
       <ol class="breadcrumb" style="color:black ; font-size: 17px; font-family:Times">
         <li><a href="#"><i class="fa fa-dashboard" ></i> Home</a></li>
         <li class="active" style="color:black ; font-size: 17px; font-family:Times" >Dashboard</li>
@@ -53,7 +53,7 @@
                 <thead>
                   <th class="hidden"></th>
                   <th>Position</th>
-                  <th>Photo</th>
+                  <th>Election</th>
                   <th>Firstname</th>
                   <th>Lastname</th>
                   <th>Platform</th>
@@ -62,29 +62,22 @@
                 <tbody>
                   <?php
                   try {
-                    $sql = "SELECT *, candidates.id AS canid FROM candidates LEFT JOIN positions ON positions.id=candidates.position_id ORDER BY positions.priority ASC";
+                    $sql = "SELECT *, candidates.id AS canid, positions.id as position_id, elections.name as election_name, positions.description as pos_desc FROM candidates LEFT JOIN positions ON positions.id=candidates.position_id LEFT JOIN elections ON elections.id=positions.election_id ORDER BY positions.priority ASC";
                     $result = pg_query($conn, $sql);
-          
                     if (!$result) {
                       throw new Exception("An error occurred.\n");
                     }
-          
                     while($row = pg_fetch_assoc($result)){
-                      $image = (!empty($row['photo'])) ? '../images/'.$row['photo'] : '../images/profile.jpg';
                       echo "
                         <tr style='color:black ; font-size: 15px; font-family:Times'>
                           <td class='hidden'></td>
-                          <td>".$row['description']."</td>
-                          <td>
-                            <img src='".$image."' width='30px' height='30px'>
-                            <a href='#edit_photo' data-toggle='modal' class='pull-right photo' data-id='".$row['canid']."'><span class='fa fa-edit'></span></a>
-                          </td>
+                          <td>".$row['pos_desc']."</td>
+                          <td>".$row['election_name']."</td>
                           <td>".$row['firstname']."</td>
                           <td>".$row['lastname']."</td>
                           <td><a href='#platform' data-toggle='modal' class='btn btn-info btn-sm btn-curve platform'  style='background-color: #00BFFF ;color:black ; font-size: 12px; font-family:Times' data-id='".$row['canid']."'><i class='fa fa-search'></i> View</a></td>
                           <td>
                             <button class='btn btn-success btn-sm edit btn-curve' style='background-color: #9CD095 ;color:black ; font-size: 12px; font-family:Times'  data-id='".$row['canid']."' ><i class='fa fa-edit'></i> Edit</button>
-
                             <button class='btn btn-danger btn-sm delete btn-curve' style='background-color:#ff8e88 ;color:black ; font-size: 12px; font-family:Times' data-id='".$row['canid']."'><i class='fa fa-trash'></i> Delete</button>                          
                           </td>
                         </tr>
@@ -107,139 +100,112 @@
   <?php include 'includes/candidates_modal.php'; ?>
 </div>
 <?php include 'includes/scripts.php'; ?>
+<script src="candidates.js"></script>
+
 <script>
-
-
-	$(function(){
-//$(document).on('click', '.edit', function(e){
-//  e.preventDefault();
-//  var id = $(this).data('id');
-
-//  getRow(id, function(response) {
-    // Assuming response contains the candidate data
-//    $('#edit_firstname').val(response.firstname);
-//    $('#edit_lastname').val(response.lastname);
- //   $('#edit_position').val(response.position); // you may need to handle this differently if it's a dropdown
- //   $('#edit_platform').val(response.platform);
-
-    // Set the hidden input field's value to the candidate's ID
-   // $('#edit input[name="id"]').val(id);
-
-//    $('#edit').modal('show');
-//  });
-//});
-
-$(document).on('click', '.edit', function(e){
+$(function(){
+  $(document).on('click', '.edit', function(e){
     e.preventDefault();
     $('#edit').modal('show');
     var id = $(this).data('id');
-    var firstname = $(this).data('firstname');
-    var lastname = $(this).data('lastname');
-    var platform = $(this).data('platform');
-    var position = $(this).data('position');
+    getRow(id);
+  });
+$("#edit_form").submit(function(e){
+    e.preventDefault();
+    var formData = $(this).serialize();
+    $.ajax({
+        type: "POST",
+        url: "candidates_edit.php",
+        data: formData,
+        dataType: "json",
+        success: function(response)
+        {
 
-    // Set the form field values
-    $('#edit input[name="id"]').val(id);  // Hidden input for ID
-    $('#edit_firstname').val(firstname);
-    $('#edit_lastname').val(lastname);
-    $('#edit_platform').val(platform);
-    $('#edit_position').val(position); // Assuming you also want to autofill position
-});
-
-
-
-$('#edit').on('submit', 'form', function(e) {
-  e.preventDefault();
-
-  var id = $(this).find('[name="id"]').val();
-  var firstname = $('#edit_firstname').val();
-  var lastname = $('#edit_lastname').val();
-  var position = $('#edit_position').val();
-  var platform = $('#edit_platform').val();
-
-  // Now we send the AJAX request
-  $.ajax({
-    type: 'POST',
-    url: 'candidates_edit.php',
-    data: {
-      id: id,
-      edit: true, // This is required to pass the 'if(isset($_POST['edit']))' check in your PHP code
-      firstname: firstname,
-      lastname: lastname,
-      position: position,
-      platform: platform
-    },
-    dataType: 'json',
-    success: function(response) {
-      if (response.error) {
-        alert('Error: ' + response.error);
-      } else {
-        location.reload();
+$('#edit').modal('hide');
+         if(response.status){
+            alert(response.message);
+            location.reload();
+         }
+         else{
+            alert(response.message);
+         }
+        },
+        error: function()
+        {
+            alert('Error');
       }
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-    console.log('jqXHR:', jqXHR);
-    console.log('textStatus:', textStatus);
-    console.log('errorThrown:', errorThrown);  
-}
-
+    });
+  });
 });
-});
-
-
 
 $(document).on('click', '.delete', function(e){
     e.preventDefault();
     var id = $(this).data('id');
-    console.log("ID to delete: ", id); // Log the ID to the console
-    $('#delete').modal({
-        backdrop: 'static',
-        keyboard: false
-    }).one('click', '#confirm_delete', function(e) {
+    if(confirm('Are you sure you want to delete this candidate?')){
         $.ajax({
-            type: 'POST',
-            url: 'candidates_delete.php',
+            type: "POST",
+            url: "candidates_delete.php",
             data: {id:id},
-            dataType: 'json',
-            success: function(response){
-                if(response.error) {
-                    console.error("Error deleting candidate: ", response.error);
-                } else {
+            dataType: "json",
+            success: function(response)
+            {
+                if(response.success){
+                    alert('Candidate deleted successfully');
                     location.reload();
                 }
+                else{
+                    alert(response.error);
+                }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error("AJAX error: ", textStatus, ", ", errorThrown);
+            error: function()
+            {
+                alert('An error occurred. Please try again later.');
             }
         });
-    });
-});
- 
-  $(document).on('click', '.photo', function(e){
-    e.preventDefault();
-    var id = $(this).data('id');
-    getRow(id);
-  });
-
-  $(document).on('click', '.platform', function(e){
-    e.preventDefault();
-    var id = $(this).data('id');
-    getRow(id);
-  });
+    }
 });
 
-function getRow(id, callback){
+$(document).on('click', '[data-target="#platformModal"]', function() {
+  var id = $(this).data('id');
+  $.ajax({
+    type: 'POST',
+    url: 'candidates_platform.php',
+    data: {id:id},
+    success: function(response){
+      $('#platformBody').html(response);
+    }
+  });
+});
+function getPlatform(id){
+  $.ajax({
+    type: 'POST',
+    url: 'candidates_platform.php',
+    data: {id:id},
+    dataType: 'json',
+    success: function(response){
+      $('#platform_view').html(response.platform);
+      $('#platform').modal('show');
+    },
+    error: function(){
+      alert('An error occurred. Please try again later.');
+    }
+  });
+}
+
+function getRow(id){
   $.ajax({
     type: 'POST',
     url: 'candidates_row.php',
     data: {id:id},
     dataType: 'json',
     success: function(response){
-      if(response.error){
-        alert(response.error);
-      } else {
-        callback(response);
-      }
+      $('.id').val(response.result.canid);  // This line sets the ID
+      $('#edit_firstname').val(response.result.firstname);
+      $('#edit_lastname').val(response.result.lastname);
+      $('#edit_position').val(response.result.position_id);
+      $('#edit_platform').val(response.result.platform);
+      $('#edit_photo').val(response.result.photo);
+      $('#platform_view').html(response.result.platform);
     }
   });
 }

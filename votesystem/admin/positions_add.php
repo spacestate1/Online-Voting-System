@@ -1,30 +1,39 @@
 <?php
-	include 'includes/session.php';
+include 'includes/session.php';
 
-	if(isset($_POST['add'])){
-		$description = $_POST['description'];
-		$max_vote = $_POST['max_vote'];
+if(isset($_POST['add'])){
+    try {
+        $election_id = pg_escape_string($conn, $_POST['election_id']);
+        $description = pg_escape_string($conn, $_POST['description']);
+        $max_vote = pg_escape_string($conn, $_POST['max_vote']);
 
-		$sql = "SELECT * FROM positions ORDER BY priority DESC LIMIT 1";
-		$query = pg_query($conn, $sql);
-		$row = pg_fetch_assoc($query);
+        if (!isset($_POST['priority']) || !is_numeric($_POST['priority'])) {
+            throw new Exception('Priority must be a number');
+        }
+        $priority = pg_escape_string($conn, $_POST['priority']);
 
-		$priority = $row['priority'] + 1;
-		
-		$sql = "INSERT INTO positions (description, max_vote, priority) VALUES ($1, $2, $3)";
-		$result = pg_query_params($conn, $sql, array($description, $max_vote, $priority));
-		if($result){
-			$_SESSION['success'] = 'Position added successfully';
-		}
-		else{
-			$_SESSION['error'] = pg_last_error($conn);
-		}
+        // check if the position already exists
+        $check_sql = "SELECT * FROM positions WHERE election_id = '$election_id' AND description = '$description' AND max_vote = '$max_vote' AND priority = '$priority'";
+        $check_result = pg_query($conn, $check_sql);
+        if (pg_num_rows($check_result) > 0) {
+            throw new Exception('The position already exists');
+        }
 
-	}
-	else{
-		$_SESSION['error'] = 'Fill up add form first';
-	}
+        $sql = "INSERT INTO positions (election_id, description, max_vote, priority) VALUES ('$election_id', '$description', '$max_vote', '$priority')"; // add priority here
+        $result = pg_query($conn, $sql);
 
-	header('location: positions.php');
+        if(!$result){
+            throw new Exception(pg_last_error($conn));
+        }
+        $_SESSION['success'] = 'Position added successfully';
+    } catch (Exception $e) {
+        $_SESSION['error'] = $e->getMessage();
+    }
+}
+else{
+    $_SESSION['error'] = 'Fill up add form first';
+}
+
+header('location: positions.php');
 ?>
 

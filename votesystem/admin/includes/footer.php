@@ -2,5 +2,5 @@
     <div class="pull-right hidden-xs "  style="color:white ; font-size: 13px"  >
       <b>All rights reserved</b>
     </div  >
-    <b style="color:white ; font-size: 13px"><strong>Copyright &copy; CGL </strong></b>
+    <b style="color:white ; font-size: 13px"><strong>Copyright &copy; WECP </strong></b>
 </footer>
