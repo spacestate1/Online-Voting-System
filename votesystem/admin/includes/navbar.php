@@ -4,7 +4,7 @@
     <!-- mini logo for sidebar mini 50x50 pixels -->
     <span class="logo-mini" style="background-color: #717A83 "><b>O</b>VS</span>
     <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg " style="background-color:#717A83 ;color:white ; font-size: 22px; font-family:Times  "><marquee behavior="scroll" direction="left">WECO Voting System</marquee></span>
+    <span class="logo-lg " style="background-color:#717A83 ;color:white ; font-size: 22px; font-family:Times  "><marquee behavior="scroll" direction="left">Wyoming Energy Co-Op Voting System</marquee></span>
     
 
   </a>

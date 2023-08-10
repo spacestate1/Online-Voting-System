@@ -201,8 +201,12 @@ function generateActionItemRow($conn) {
             die("Execution failed: " . pg_last_error());
         }
 
-        while ($action_item = pg_fetch_assoc($actionQuery)) {
-            $contents .= "<tr><td>" . htmlspecialchars($action_item['title']) . "</td><td>" . htmlspecialchars($action_item['description']) . "</td><td><input type='radio' name='action_vote_" . $action_item['id'] . "' value='Approved'> Approved <input type='radio' name='action_vote_" . $action_item['id'] . "' value='Denied'> Denied</td></tr>";
+       # while ($action_item = pg_fetch_assoc($actionQuery)) {
+       #     $contents .= "<tr><td>" . htmlspecialchars($action_item['title']) . "</td><td>" . htmlspecialchars($action_item['description']) . "</td><td><input type='radio' name='action_vote_" . $action_item['id'] . "' value='Approve'> Approve <input type='radio' name='action_vote_" . $action_item['id'] . "' value='Deny'> Deny</td></tr>";
+       while ($action_item = pg_fetch_assoc($actionQuery)) {
+    $contents .= "<tr><td>" . htmlspecialchars($action_item['title']) . "</td><td>" . htmlspecialchars($action_item['description']) . "</td><td>";
+    $contents .= "<input type='radio' name='action_vote_" . $action_item['id'] . "' value='Approve'> Approve<br>";
+    $contents .= "<input type='radio' name='action_vote_" . $action_item['id'] . "' value='Deny'> Deny</td></tr>";
         }
         $contents .= "</table>";
     }

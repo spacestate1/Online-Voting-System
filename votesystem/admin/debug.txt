@@ -1,1 +1,0 @@
-{"id":"1","position_id":"1","firstname":"test","lastname":"one","photo":"","platform":"Blah Platform","description":"test-position","max_vote":"2","priority":"1","canid":"1"}
