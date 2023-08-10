@@ -6,14 +6,58 @@
 ?>
 <?php include 'includes/header.php'; ?>
 
-<body class="hold-transition login-page" style="background-color:#F1E9D2" >
-<div class="login-box" style="background-color:#a69f8b ;color:white ; font-size: 22px; font-family:Times">
-  	<div class="login-logo" style="background-color: #a69f8b  ;color:white ; font-size: 22px; font-family:Times  ">
-  		<b> WYECO Voting System </b>
+<style>
+  body {
+    background-color: #F1E9D2;
+  }
+
+  .login-box {
+    background-color: #a69f8b;
+    color: white;
+    font-size: 22px;
+    font-family: Times;
+  }
+
+  .login-logo {
+    background-color: #a69f8b;
+    color: white;
+    font-size: 22px;
+    font-family: Times;
+  }
+
+  .login-box-body {
+    background-color: #a69f8b;
+    color: white;
+    font-size: 22px;
+    font-family: Times;
+  }
+
+  .login-box-msg {
+    color: black;
+    font-size: 16px;
+    font-family: Times;
+  }
+
+  .btn-curve {
+    background-color: #4682B4;
+    color: black;
+    font-size: 12px;
+    font-family: Times;
+  }
+
+  .callout.callout-danger.text-center.mt20 {
+    /* Add your custom styles for this element here */
+  }
+</style>
+
+<body class="hold-transition login-page">
+<div class="login-box">
+  	<div class="login-logo">
+  		<b> WECO Voting System </b>
   	</div>
   
-  	<div class="login-box-body"style="background-color:#a69f8b ;color:white ; font-size: 22px; font-family:Times  " >
-    	<p class="login-box-msg" style="color:black ; font-size: 16px; font-family:Times  " >Sign in to start your admin session</p>
+  	<div class="login-box-body">
+    	<p class="login-box-msg">Sign in to start your admin session</p>
 
     	<form action="login.php" method="POST">
       		<div class="form-group has-feedback">
@@ -26,7 +70,7 @@
           </div>
       		<div class="row">
     			<div class="col-xs-4">
-          			<button type="submit" class="btn btn-primary btn-block btn-curve"style="background-color: #4682B4 ;color:black ; font-size: 12px; font-family:Times"  name="login"><i class="fa fa-sign-in"></i> Sign In</button>
+          			<button type="submit" class="btn btn-primary btn-block btn-curve" name="login"><i class="fa fa-sign-in"></i> Sign In</button>
         		</div>
       		</div>
     	</form>
@@ -46,3 +90,4 @@
 <?php include 'includes/scripts.php' ?>
 </body>
 </html>
+
