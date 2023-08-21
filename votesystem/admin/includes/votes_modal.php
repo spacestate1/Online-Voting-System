@@ -26,19 +26,9 @@ $elections = pg_query($conn, $query);
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="reset_type" class="col-sm-3 control-label">Reset Type</label>
-                        <div class="col-sm-9">
-                            <select class="form-control" name="reset_type" id="reset_type" required>
-                                <option value="" disabled selected>Select Type</option>
-                                <option value="votes">Candidate Votes</option>
-                                <option value="action_items">Action Item Votes</option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-curve pull-left" style='background-color:  #FFDEAD  ;color:black ; font-size: 12px; font-family:Times' data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                        <button type="submit" class="btn btn-danger btn-curve" style='background-color:  #ff8e88  ;color:black ; font-size: 12px; font-family:Times'><i class="fa fa-refresh"></i> Reset</button>
+                        <button type="button" class="btn btn-default btn-curve pull-left" style='background-color: #FFDEAD;color:black ; font-size: 12px; font-family:Times' data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button type="submit" class="btn btn-danger btn-curve" style='background-color: #ff8e88;color:black ; font-size: 12px; font-family:Times'><i class="fa fa-refresh"></i> Reset</button>
                     </div>
                 </form>
             </div>

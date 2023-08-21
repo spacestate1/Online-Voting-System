@@ -31,56 +31,54 @@
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
   	<style>
- .mt20{
-        margin-top: 20px;
-    }
-    .title{
-        font-size: 50px;
-    }
-    #candidate_list{
-        margin-top:20px;
-    }
+        .mt20 {
+            margin-top: 20px;
+        }
+        .title {
+            font-size: 50px;
+        }
+        #candidate_list {
+            margin-top:20px;
+        }
+        #candidate_list ul {
+            list-style-type:none;
+        }
+        #candidate_list ul li { 
+            margin:0 30px 30px 0; 
+            vertical-align:top;
+        }
+        .clist {
+            margin-left: 20px;
+        }
+        .cname {
+            font-size: 25px;
+        }
+        .votelist {
+            font-size: 17px;
+        }
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        /* Adjusting the width for the Vote column */
+        table th:nth-child(3), table td:nth-child(3) { 
+            width: 150px; 
+        }
 
-    #candidate_list ul{
-        list-style-type:none;
-    }
-
-    #candidate_list ul li{ 
-        margin:0 30px 30px 0; 
-        vertical-align:top
-    }
-
-    .clist{
-        margin-left: 20px;
-    }
-
-    .cname{
-        font-size: 25px;
-    }
-
-    .votelist{
-        font-size: 17px;
-    }
-
-    /* Table styles */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    table, th, td {
-        border: 1px solid black;
-    }
-
-    th, td {
-        padding: 15px;
-        text-align: left;
-    }
-
-    /* Adjusting the width for the Vote column */
-    table th:nth-child(3), table td:nth-child(3) { /* Assuming "Vote" is the third column */
-        width: 150px; /* You can adjust this value to your preference */
-    }
-</style>		
+        /* Media query for screens with max-width of 768px */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 30px; /* Adjusted font size for smaller screens */
+            }
+        }
+    </style>		
 </head>
 

@@ -48,8 +48,9 @@ function userHasVoted($conn) {
     return $userHasVotedForCandidates && $userHasVotedForActionItems;
 }
 
+
 function generateCandidateRow($conn) {
-     $electionId = $_SESSION['election_id'];
+    $electionId = $_SESSION['election_id'];
     $contents = '';
 
     // Check if there are any candidates for the current election
@@ -59,7 +60,7 @@ function generateCandidateRow($conn) {
     $queryCheck = pg_execute($conn, $stmtname_check, array($electionId));
 
     if (pg_num_rows($queryCheck) == 0) {
-        return ''; // Return empty string if no candidates
+        return '<h2>No candidates listed for this election.</h2>'; // Return message if no candidates
     }
 
     // Check if the user has voted for candidates
@@ -69,29 +70,42 @@ function generateCandidateRow($conn) {
     $query = pg_execute($conn, $stmtname_votecheck, array($_SESSION['userid'], $electionId));
     $userHasVotedForCandidates = pg_num_rows($query) > 0;
 
-if ($userHasVotedForCandidates) {
+    // Define and prepare the statement for fetching position's description
+    $sql_position = "SELECT description FROM positions WHERE id = $1";
+    $stmtname_position = uniqid("fetch_position_");
+    pg_prepare($conn, $stmtname_position, $sql_position);
+
+    if ($userHasVotedForCandidates) {
         $contents .= "<h2>You have already voted for the candidates. Here are your votes:</h2>";
+
+        // Define and prepare the statement for fetching candidate's details
+        $sql_candidate = "SELECT * FROM candidates WHERE id = $1";
+        $stmtname_candidate = uniqid("fetch_candidate_");
+        pg_prepare($conn, $stmtname_candidate, $sql_candidate);
 
         while ($vote = pg_fetch_assoc($query)) {
             $candidateQuery = pg_execute($conn, $stmtname_candidate, array($vote['candidate_id']));
             $candidate = pg_fetch_assoc($candidateQuery);
-            $contents .= "<strong>{$candidate['position']}</strong>";  // Make position bold
+
+            // Fetch the position description for the candidate
+            $positionQuery = pg_execute($conn, $stmtname_position, array($candidate['position_id']));
+            $position = pg_fetch_assoc($positionQuery);
+
+            $contents .= "<strong>{$position['description']}</strong>";  // Make position bold
             $contents .= "<table>";
             $contents .= "<tr><th>Candidate</th></tr>";
             $contents .= "<tr><td>{$candidate['firstname']} {$candidate['lastname']}</td></tr>";
             $contents .= "</table>";
         }
     } else {
-        
         $contents .= "<h2>Vote for the candidates:</h2>";
 
         $sql = "SELECT * FROM positions WHERE election_id = $1 ORDER BY priority ASC";
         $stmtname_positions = uniqid(); // unique statement name
-        $result = pg_prepare($conn, $stmtname_positions, $sql);
+        pg_prepare($conn, $stmtname_positions, $sql);
         $positionQuery = pg_execute($conn, $stmtname_positions, array($electionId));
 
         while ($position = pg_fetch_assoc($positionQuery)) {
-
             // Add a header for each position
             $contents .= "<strong>{$position['description']}</strong>";  // Make position bold
             $contents .= "<table>";
@@ -100,12 +114,17 @@ if ($userHasVotedForCandidates) {
             // Fetch candidates for the current position
             $sqlCandidates = "SELECT * FROM candidates WHERE position_id = $1";
             $stmtname_candidates = uniqid();
-            $resultCandidates = pg_prepare($conn, $stmtname_candidates, $sqlCandidates);
+            pg_prepare($conn, $stmtname_candidates, $sqlCandidates);
             $candidatesQuery = pg_execute($conn, $stmtname_candidates, array($position['id']));
 
-            while ($candidate = pg_fetch_assoc($candidatesQuery)) {
-                $contents .= "<tr><td>{$candidate['firstname']} {$candidate['lastname']}</td><td><input type='radio' name='vote_{$position['id']}' value='{$candidate['id']}'> Vote</td></tr>";
+            if (pg_num_rows($candidatesQuery) == 0) {
+                $contents .= "<tr><td colspan='2'>No candidates available for this position.</td></tr>";
+            } else {
+                while ($candidate = pg_fetch_assoc($candidatesQuery)) {
+                    $contents .= "<tr><td>{$candidate['firstname']} {$candidate['lastname']}</td><td><input type='radio' name='vote_{$position['id']}' value='{$candidate['id']}'> Vote</td></tr>";
+                }
             }
+
             $contents .= "</table>";
         }
     }
