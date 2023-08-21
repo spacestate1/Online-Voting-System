@@ -5,11 +5,11 @@
 ![](https://img.shields.io/github/license/Candida18/Online-Voting-System?style=for-the-badge) &emsp; &emsp;
 
 <br>
-<p align="justify"> Operating system: should work on most Linux distros </p>
+
 
 ## ABSTRACT
 <p align="justify">Simple Online vote system using Apache/Nginx, Postgres SQL and PHP. Users login in and vote and get results </p>
-
+<p align="justify"> Operating system: should work on most Linux distros </p>
 
 <br>
 
