@@ -86,34 +86,39 @@ CREATE TABLE voters (
 
 -- --------------------------------------------------------
 
--- Table structure for table votes
-
+-- Votes Table
 CREATE TABLE votes (
-  id SERIAL PRIMARY KEY,
-  election_id INT NOT NULL,
-  voters_id INT NOT NULL,
-  candidate_id INT NOT NULL,
-  position_id INT NOT NULL,
-  FOREIGN KEY (election_id) REFERENCES elections (id) ON DELETE CASCADE,
-  FOREIGN KEY (voters_id) REFERENCES voters (id) ON DELETE CASCADE,
-  FOREIGN KEY (candidate_id) REFERENCES candidates (id) ON DELETE CASCADE,
-  FOREIGN KEY (position_id) REFERENCES positions (id) ON DELETE CASCADE
+    id SERIAL PRIMARY KEY,
+    election_id INT NOT NULL,
+    voters_id INT NOT NULL,
+    candidate_id INT,  -- Nullable for abstains
+    position_id INT NOT NULL,
+    abstain BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (election_id) REFERENCES elections (id) ON DELETE CASCADE,
+    FOREIGN KEY (voters_id) REFERENCES voters (id) ON DELETE CASCADE,
+    FOREIGN KEY (candidate_id) REFERENCES candidates (id) ON DELETE CASCADE,
+    FOREIGN KEY (position_id) REFERENCES positions (id) ON DELETE CASCADE,
+    UNIQUE(voters_id, position_id)
 );
 
 -- --------------------------------------------------------
 
-------- action items votes -----------
+-- Create ENUM type for action items vote
+CREATE TYPE action_vote AS ENUM ('Approved', 'Denied', 'Abstain');
+
+------- Action Items Votes -----------
 CREATE TABLE action_item_votes (
     id SERIAL PRIMARY KEY,
-    election_id INT NOT NULL,
-    voters_id INT NOT NULL,
-    action_item_id INT NOT NULL,
-    vote VARCHAR(10) NOT NULL CHECK(vote IN ('Approved', 'Denied')), -- 'Approved' or 'Denied'
-    FOREIGN KEY (election_id) REFERENCES elections (id) ON DELETE CASCADE,
-    FOREIGN KEY (voters_id) REFERENCES voters (id) ON DELETE CASCADE,
-    FOREIGN KEY (action_item_id) REFERENCES action_items (id) ON DELETE CASCADE,
-    UNIQUE(voters_id, action_item_id)
+    action_item_id INTEGER NOT NULL,
+    voters_id INTEGER NOT NULL,
+    vote action_vote NOT NULL,  -- Using ENUM type
+    vote_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    election_id INTEGER NOT NULL,
+    FOREIGN KEY (action_item_id) REFERENCES public.action_items(id) ON DELETE CASCADE,
+    FOREIGN KEY (voters_id) REFERENCES public.voters(id) ON DELETE CASCADE,
+    FOREIGN KEY (election_id) REFERENCES public.elections(id) ON DELETE CASCADE
 );
+
 --------------------------------------------------------------
 -- Inserting data for table admin
 INSERT INTO admin (username, password, firstname, lastname, email, photo, created_on) 

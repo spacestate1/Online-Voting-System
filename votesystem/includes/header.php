@@ -31,51 +31,56 @@
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
   	<style>
-  		.mt20{
+ .mt20{
         margin-top: 20px;
-      }
-      .title{
+    }
+    .title{
         font-size: 50px;
-      }
-      #candidate_list{
+    }
+    #candidate_list{
         margin-top:20px;
-      }
+    }
 
-      #candidate_list ul{
+    #candidate_list ul{
         list-style-type:none;
-      }
+    }
 
-      #candidate_list ul li{ 
+    #candidate_list ul li{ 
         margin:0 30px 30px 0; 
         vertical-align:top
-      }
+    }
 
-      .clist{
+    .clist{
         margin-left: 20px;
-      }
+    }
 
-      .cname{
+    .cname{
         font-size: 25px;
-      }
+    }
 
-      .votelist{
+    .votelist{
         font-size: 17px;
-      }
+    }
 
-      /* Table styles */
-      table {
-          width: 100%;
-          border-collapse: collapse;
-      }
+    /* Table styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-      table, th, td {
-          border: 1px solid black;
-      }
+    table, th, td {
+        border: 1px solid black;
+    }
 
-      th, td {
-          padding: 15px;
-          text-align: left;
-      }
-  	</style>		
+    th, td {
+        padding: 15px;
+        text-align: left;
+    }
+
+    /* Adjusting the width for the Vote column */
+    table th:nth-child(3), table td:nth-child(3) { /* Assuming "Vote" is the third column */
+        width: 150px; /* You can adjust this value to your preference */
+    }
+</style>		
 </head>
 

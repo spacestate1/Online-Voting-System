@@ -69,31 +69,21 @@ function generateCandidateRow($conn) {
     $query = pg_execute($conn, $stmtname_votecheck, array($_SESSION['userid'], $electionId));
     $userHasVotedForCandidates = pg_num_rows($query) > 0;
 
-    if ($userHasVotedForCandidates) {
+if ($userHasVotedForCandidates) {
         $contents .= "<h2>You have already voted for the candidates. Here are your votes:</h2>";
-        
-        // Display the candidate votes
-        $contents .= "<table>";
-        $contents .= "<tr><th>Candidate</th><th>Position</th></tr>";
 
-        $sql = "SELECT c.*, p.description as position 
-                FROM candidates c 
-                JOIN positions p ON c.position_id = p.id 
-                WHERE c.id = $1";
-        $stmtname_candidate = uniqid(); // unique statement name
-        $result = pg_prepare($conn, $stmtname_candidate, $sql);
-        
         while ($vote = pg_fetch_assoc($query)) {
             $candidateQuery = pg_execute($conn, $stmtname_candidate, array($vote['candidate_id']));
             $candidate = pg_fetch_assoc($candidateQuery);
-            $contents .= "<tr><td>{$candidate['firstname']} {$candidate['lastname']}</td><td>{$candidate['position']}</td></tr>";
+            $contents .= "<strong>{$candidate['position']}</strong>";  // Make position bold
+            $contents .= "<table>";
+            $contents .= "<tr><th>Candidate</th></tr>";
+            $contents .= "<tr><td>{$candidate['firstname']} {$candidate['lastname']}</td></tr>";
+            $contents .= "</table>";
         }
-        $contents .= "</table>";
     } else {
-
-$contents .= "<h2>Vote for the candidates:</h2>";
-        $contents .= "<table>";
-        $contents .= "<tr><th>Candidate</th><th>Position</th><th>Vote</th></tr>";
+        
+        $contents .= "<h2>Vote for the candidates:</h2>";
 
         $sql = "SELECT * FROM positions WHERE election_id = $1 ORDER BY priority ASC";
         $stmtname_positions = uniqid(); // unique statement name
@@ -102,22 +92,26 @@ $contents .= "<h2>Vote for the candidates:</h2>";
 
         while ($position = pg_fetch_assoc($positionQuery)) {
 
+            // Add a header for each position
+            $contents .= "<strong>{$position['description']}</strong>";  // Make position bold
+            $contents .= "<table>";
+            $contents .= "<tr><th>Candidate</th><th>Vote</th></tr>";
+
             // Fetch candidates for the current position
             $sqlCandidates = "SELECT * FROM candidates WHERE position_id = $1";
             $stmtname_candidates = uniqid();
             $resultCandidates = pg_prepare($conn, $stmtname_candidates, $sqlCandidates);
             $candidatesQuery = pg_execute($conn, $stmtname_candidates, array($position['id']));
-            
+
             while ($candidate = pg_fetch_assoc($candidatesQuery)) {
-                $contents .= "<tr><td>{$candidate['firstname']} {$candidate['lastname']}</td><td>{$position['description']}</td><td><input type='radio' name='vote_{$position['id']}' value='{$candidate['id']}'> Vote</td></tr>";
+                $contents .= "<tr><td>{$candidate['firstname']} {$candidate['lastname']}</td><td><input type='radio' name='vote_{$position['id']}' value='{$candidate['id']}'> Vote</td></tr>";
             }
+            $contents .= "</table>";
         }
-        $contents .= "</table>";
     }
 
     return $contents;
 }
-
 
 function generateActionItemRow($conn) {
     $electionId = $_SESSION['election_id'];
