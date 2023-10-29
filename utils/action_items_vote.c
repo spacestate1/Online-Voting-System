@@ -21,8 +21,8 @@ int main(int argc, char *argv[]) {
     // Define PostgreSQL connection parameters
     const char *pg_host = "localhost";
     const char *pg_dbname = "votesystem";
-    const char *pg_username = "votedb";
-    const char *pg_password = "pass1"; // replace with your actual password
+    const char *pg_username = "system";
+    const char *pg_password = "system-pass"; // replace with your actual password
     
     // Build the connection parameters array
     const char *const keywords[] = {
@@ -44,18 +44,20 @@ int main(int argc, char *argv[]) {
 
     const char *query;
     if (strcmp(argv[1], "-t") == 0) {
-        query = "SELECT ai.title, e.name, e.start_date, \
-                        SUM(CASE WHEN aiv.vote = 'Approve' THEN 1 ELSE 0 END) AS approve_count, \
-                        SUM(CASE WHEN aiv.vote = 'Deny' THEN 1 ELSE 0 END) AS deny_count, \
-                        CASE \
-                            WHEN SUM(CASE WHEN aiv.vote = 'Approve' THEN 1 ELSE 0 END) > SUM(CASE WHEN aiv.vote = 'Deny' THEN 1 ELSE 0 END) THEN 'Approved' \
-                            ELSE 'Denied' \
-                        END as final_verdict \
-                 FROM action_item_votes aiv \
-                 JOIN action_items ai ON ai.id = aiv.action_item_id \
-                 JOIN elections e ON e.id = aiv.election_id \
-                 GROUP BY ai.title, e.name, e.start_date;";
-    } else if (strcmp(argv[1], "-u") == 0) {
+    query = "SELECT ai.title, e.name, e.start_date, \
+                    SUM(CASE WHEN aiv.vote = 'Approved' THEN 1 ELSE 0 END) AS approve_count, \
+                    SUM(CASE WHEN aiv.vote = 'Denied' THEN 1 ELSE 0 END) AS deny_count, \
+                    CASE \
+                        WHEN SUM(CASE WHEN aiv.vote = 'Approved' THEN 1 ELSE 0 END) > SUM(CASE WHEN aiv.vote = 'Denied' THEN 1 ELSE 0 END) THEN 'Approved' \
+                        ELSE 'Denied' \
+                    END as final_verdict \
+             FROM action_item_votes aiv \
+             JOIN action_items ai ON ai.id = aiv.action_item_id \
+             JOIN elections e ON e.id = aiv.election_id \
+             GROUP BY ai.title, e.name, e.start_date;";    
+
+
+} else if (strcmp(argv[1], "-u") == 0) {
         query = "SELECT v.firstname, v.lastname, ai.title, aiv.vote, e.name, e.start_date \
                           FROM action_item_votes aiv \
                           JOIN voters v ON v.id = aiv.voters_id \

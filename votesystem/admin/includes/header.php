@@ -1,7 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-  	<meta charset="utf-8">
+<style>
+    /* Status Dot Styling */
+    .status-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+
+    .status-dot.online {
+        background-color: #4CAF50; /* green */
+    }
+
+    .status-dot.offline {
+        background-color: #f44336; /* red */
+    }
+
+    /* Table Header Styling */
+    #votersTable thead th {
+        background-color: #007BFF; /* blue shade */
+        color: white;
+    }
+
+    /* Icon Styling (From first example, if needed) */
+    .icon {
+        font-size: 24px;
+        margin: 10px 0;
+    }
+
+    /* Typography Styling (From first example, if needed) */
+    h3 {
+        margin: 0;
+        padding: 0;
+    }
+
+    p {
+        margin: 10px 0;
+    }
+
+    /* Candidate List Styling (From first example, if needed) */
+    .bold {
+        font-weight:bold;
+    }
+      
+    #candidate_list {
+        margin-top:20px;
+    }
+
+    #candidate_list ul {
+        list-style-type:none;
+    }
+
+    #candidate_list ul li { 
+        margin:0 30px 30px 0; 
+        vertical-align:top;
+    }
+
+    .clist {
+        margin-left: 20px;
+    }
+
+    .cname {
+        font-size: 25px;
+    }
+</style>
+
+
+<meta charset="utf-8">
   	<meta http-equiv="X-UA-Compatible" content="IE=edge">
   	<title>WECO Voting System</title>
   	<!-- Tell the browser to be responsive to screen width -->

@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include 'includes/header.php'; ?>
+    <?php 
+    // Start the session if not started already
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    // Generate a CSRF token if one doesn't exist
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    
+    include 'includes/header.php'; 
+    ?>
     <link rel="stylesheet" href="css/style.css"> <!-- Your CSS Stylesheet -->
 </head>
 <body class="login-page">
@@ -14,6 +26,9 @@
             <p class="login-box-msg">Sign in to start your voting session</p>
 
             <form action="login.php" method="POST">
+                <!-- CSRF token hidden input -->
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                
                 <div class="form-group has-feedback">
                     <input type="text" class="form-control" name="user_id" placeholder="User ID" required>
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>

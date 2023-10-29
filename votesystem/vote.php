@@ -20,16 +20,40 @@ if (isset($_SESSION['userid'])) {
     $voter = pg_fetch_assoc($query);
 }
 
-
 function getCurrentElection($conn) {
+    if (!isset($_SESSION['election_id'])) {
+        echo "<h1>No current elections</h1>";
+        exit();
+    }
+
     $electionId = $_SESSION['election_id'];
     $sql = "SELECT * FROM elections WHERE id = $1";
     $stmtname = "fetch_election";
     $result = pg_prepare($conn, $stmtname, $sql);
     $query = pg_execute($conn, $stmtname, array($electionId));
     $election = pg_fetch_assoc($query);
+
+    if (!$election) {
+        echo "<h1>No current elections</h1>";
+        exit();
+    }
+
     return $election;
 }
+
+function hasVotableItems($conn, $electionId) {
+    $sqlCheckCandidates = "SELECT * FROM candidates WHERE election_id = $1";
+    $sqlCheckActions = "SELECT * FROM action_items WHERE election_id = $1";
+
+    $stmtCheckCandidates = pg_prepare($conn, "check_candidates_exist", $sqlCheckCandidates);
+    $stmtCheckActions = pg_prepare($conn, "check_actions_exist", $sqlCheckActions);
+
+    $queryCheckCandidates = pg_execute($conn, "check_candidates_exist", array($electionId));
+    $queryCheckActions = pg_execute($conn, "check_actions_exist", array($electionId));
+
+    return (pg_num_rows($queryCheckCandidates) > 0) || (pg_num_rows($queryCheckActions) > 0);
+}
+
 
 function userHasVoted($conn) {
     $electionId = $_SESSION['election_id'];
@@ -240,6 +264,11 @@ function generateActionItemRow($conn) {
                     <div class="col-sm-9">
                         <?php
                         $election = getCurrentElection($conn);
+                         $votableItemsExist = hasVotableItems($conn, $election['id']);
+                         if (!$election) {
+        echo "<h1>No current elections</h1>";
+        exit();
+    }
                         echo "<h1>" . htmlspecialchars($election['name']) . "</h1>";
 
                         if (isset($_SESSION['success'])) {

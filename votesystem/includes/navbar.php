@@ -2,7 +2,7 @@
   <nav class="navbar navbar-static-top" style="background-color:#717A83 ">
     <div class="container" style="background-color:#717A83 ">
       <div class="navbar-header" style="background-color:#717A83 ">
-        <a href="#" class="navbar-brand" style="background-color:#717A83 ;color:black ; font-size: 22px; font-family:Times  "><b>WECO<b> VOTING</b> SYSTEM</a>
+        <a href="#" class="navbar-brand" style="background-color:#717A83 ;color:black ; font-size: 22px; font-family:Times  "><b>Wyoming Energy Co-Op<b> Voting</b> System</a>
         <button type="button" class="navbar-toggle collapsed"style="background-color:#717A83 " data-toggle="collapse" data-target="#navbar-collapse">
           <i class="fa fa-bars"></i>
         </button>

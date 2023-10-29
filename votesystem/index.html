@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wyoming Energy CO-OP vote system</title>
+    <style>
+        /* Styles for centering content in the middle of the screen */
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;  /* Changed from 'row' to 'column' to stack elements vertically */
+            align-items: center;
+            justify-content: center;
+            background-color: #f3f4f6;  /* Light gray background for contrast */
+        }
+
+        .centered-text {
+            font-size: 2em;           /* Larger font size */
+            font-weight: bold;        /* Bold font weight */
+            color: #333;              /* Darker text color */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);  /* Subtle text shadow */
+            margin-bottom: 20px;  /* Add some space below the text before the button */
+        }
+
+        /* Styles for the button */
+        .vote-btn {
+            padding: 10px 20px;
+            background-color: #007BFF;  /* Blue background */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;  /* Smooth transition for hover effect */
+        }
+
+        .vote-btn:hover {
+            background-color: #0056b3;  /* Darker blue on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="centered-text">Wyoming Energy CO-OP</div>
+    <!-- Added a button that links to the provided URL -->
+    <a href="https://wecovote.site/index.php"><button class="vote-btn">Vote Now</button></a>
+</body>
+
+</html>
+

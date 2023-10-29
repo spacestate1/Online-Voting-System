@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+        <link rel="icon" href="/var/www/html/favicon.ico" type="image/x-icon">
   	<meta charset="utf-8">
   	<meta http-equiv="X-UA-Compatible" content="IE=edge">
   	<title>Voting System using PHP</title>
@@ -29,6 +30,40 @@
 
   	<!-- Google Font -->
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+         <?php
+         ob_start();
+         if(session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+
+        // Assuming you have the connection to the database established somewhere else
+        // and it is available to this script.
+
+        // Check if the user has been inactive for more than 20 minutes
+        if (isset($_SESSION['last_activity_time']) && (time() - $_SESSION['last_activity_time'] > 1200)) {
+            // Handle logout
+            if (isset($_SESSION['userid'])) {
+                // Update the is_logged_in status in the database
+                $updateSql = "UPDATE voters SET is_logged_in = FALSE WHERE id = $1";
+                pg_query_params($conn, $updateSql, array($_SESSION['userid']));
+
+                // Unset and destroy the session
+                session_unset();
+                session_destroy();
+                
+                // Redirecting to the index or login page
+                echo "<script>window.location.href = 'index.php';</script>";
+            }
+        }
+
+        // Update last activity time
+        $_SESSION['last_activity_time'] = time();
+    ob_end_flush();
+
+    ?>
+
+
 
   	<style>
         .mt20 {

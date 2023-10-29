@@ -15,9 +15,14 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">NAVIGATION</li>
-<li><a href="change_password.php"><i class="fa fa-info-circle"></i> <span>Change Password</span></a></li>
 
-            <li><a href="#" data-toggle="modal" data-target="#view"><i class="fa fa-file-text-o"></i> <span>Ballot History</span></a></li>
+            <!-- Link to home.php (Election Selection Screen) -->
+            <li><a href="home.php"><i class="fa fa-home"></i> <span>Home</span></a></li>
+
+            <li><a href="change_password.php"><i class="fa fa-info-circle"></i> <span>Change Password</span></a></li>
+
+            <li><a href="ballot_history.php"><i class="fa fa-file-text-o"></i> <span>Ballot History</span></a></li>
+
         </ul>
         <!-- /.sidebar-menu -->
     </section>

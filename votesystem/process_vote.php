@@ -32,6 +32,7 @@ function displayResults($conn) {
         echo "Action Item ID: " . $row['action_item_id'] . " has " . $row['vote_count'] . " votes.<br/>";
     }
 }
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $election_id = $_SESSION['election_id'];
     $voter_id = $_SESSION['userid'];
@@ -64,12 +65,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (strpos($key, 'action_vote_') === 0) {
                 $action_item_id = (int) str_replace('action_vote_', '', $key);
 
+                // Map the submitted value to a valid ENUM value
+                $valid_votes = ['Approve' => 'Approved', 'Deny' => 'Denied', 'Abstain' => 'Abstain'];  // Mapping to correct ENUM values
+                $vote_value = isset($valid_votes[$vote]) ? $valid_votes[$vote] : null;
+
+                if (!$vote_value) {
+                    throw new Exception('Invalid vote value submitted: ' . $vote);
+                }
+
                 $check_sql = "SELECT * FROM action_item_votes WHERE voters_id = $1 AND action_item_id = $2";
                 $check_query = pg_query_params($conn, $check_sql, array($voter_id, $action_item_id));
 
-                if (pg_num_rows($check_query) == 0) { 
+                if (pg_num_rows($check_query) == 0) {
                     $sql = "INSERT INTO action_item_votes (election_id, voters_id, action_item_id, vote) VALUES ($1, $2, $3, $4)";
-                    $query = pg_query_params($conn, $sql, array($election_id, $voter_id, $action_item_id, $vote));
+                    $query = pg_query_params($conn, $sql, array($election_id, $voter_id, $action_item_id, $vote_value));
                     if (!$query) {
                         throw new Exception('Action Items Execution failed: ' . pg_last_error());
                     }

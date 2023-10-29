@@ -1,15 +1,14 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g
-LIBS = -lpq
-INCLUDE_DIRS = -I/usr/include/postgresql
+CFLAGS = -I/usr/include/postgresql
+LDFLAGS = -lpq
+TARGET = generate-results
+SRC = generate-results.c
 
-all: action_items_vote
+all: $(TARGET)
 
-action_items_vote: action_items_vote.c
-	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -o $@ $< $(LIBS)
+$(TARGET): $(SRC)
+	$(CC) $(CFLAGS) $(SRC) -o $(TARGET) $(LDFLAGS)
 
 clean:
-	rm -f action_items_vote
-
-.PHONY: all clean
+	rm -f $(TARGET)
 

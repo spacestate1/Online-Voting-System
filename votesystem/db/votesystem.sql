@@ -63,7 +63,7 @@ CREATE TABLE candidates (
 
 CREATE TABLE action_items (
   id SERIAL PRIMARY KEY,
-  title VARCHAR(100) NOT NULL,
+  title VARCHAR(500) NOT NULL,
   description TEXT,
   date_created TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   election_id INT NOT NULL,
@@ -72,7 +72,6 @@ CREATE TABLE action_items (
 ---------------------------------------------
 
 -- Table structure for table voters
-
 CREATE TABLE voters (
   id SERIAL PRIMARY KEY,
   user_id VARCHAR(15) NOT NULL UNIQUE,
@@ -81,8 +80,11 @@ CREATE TABLE voters (
   firstname VARCHAR(30) NOT NULL,
   lastname VARCHAR(30) NOT NULL,
   photo VARCHAR(150),
-  email VARCHAR(100) NOT NULL
+  email VARCHAR(100) NOT NULL,
+  is_logged_in BOOLEAN DEFAULT FALSE,
+  last_login TIMESTAMP WITH TIME ZONE DEFAULT NULL
 );
+
 
 -- --------------------------------------------------------
 
@@ -119,7 +121,4 @@ CREATE TABLE action_item_votes (
     FOREIGN KEY (election_id) REFERENCES public.elections(id) ON DELETE CASCADE
 );
 
---------------------------------------------------------------
--- Inserting data for table admin
-INSERT INTO admin (username, password, firstname, lastname, email, photo, created_on) 
-VALUES ('crce', '$2y$10$kLqXG4BAJrPbsOjJ/.B4eeZn6oojNhAb8l5/cb9eZvFnYU.pz2qni', 'CRCE', 'Admin', 'admin@fake.com', 'WhatsApp Image 2021-05-27 at 17.55.34.jpeg', '2018-04-02');
+

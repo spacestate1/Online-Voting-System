@@ -1,8 +1,10 @@
 <?php include 'includes/session.php'; ?>
 <?php include 'includes/header.php'; ?>
-<body class="hold-transition skin-blue layout-top-nav">
+
+<body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
     <?php include 'includes/navbar.php'; ?>
+    <?php include 'includes/sidebar.php'; ?> <!-- This line includes the sidebar -->
 
     <div class="content-wrapper">
         <div class="container">
@@ -43,3 +45,4 @@
 <?php include 'includes/scripts.php'; ?>
 </body>
 </html>
+
